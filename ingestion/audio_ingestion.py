@@ -39,18 +39,14 @@ def extract_text_from_audio(
     if model is None:
         model = _get_whisper_model()
 
-    result = model.transcribe(path)
-
     try:
-        result = model.transcribe(path)
+        result = model.transcribe(path, fp16=False)
     except Exception:
         logger.exception(
             "Error during audio transcription",
             extra={"path": str(path)},
         )
         raise
-
-    logger.info(f"Extracted text from audio: {result['text']}")
 
     text = result["text"].strip() or ""  # type: ignore (typing of third party module giving response is wrong)
 
