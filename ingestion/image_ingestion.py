@@ -74,7 +74,7 @@ def ingest_image(image_path_string: str, pokemon: str, generation: int):
             "image",
             pokemon.lower(),
         ],
-    }
+    }  # dataset is all starter pokemon, default tag "starter"
 
     logger.debug(
         "ingest_image record created",
