@@ -10,7 +10,11 @@ from ingestion.audio_ingestion import (
 
 
 class FakeModel:
-    def transcribe(self, path: str) -> Dict[str, str]:
+    def transcribe(
+        self, path: str, fp16: bool
+    ) -> Dict[
+        str, str
+    ]:  # fp16 is a boolean that disables warnings on CPU, unnecessary for tests
         assert path.endswith("bulbasaur.mp3")
         return {"text": "This is a Bulbasaur audio clip"}
 

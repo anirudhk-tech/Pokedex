@@ -71,28 +71,32 @@ Evaluation goals are:
 
 ### Tests
 This project uses `pytest` for unit tests, with an initial focus on validating the text, image, and audio ingestion pipelines for Pokémon starter content. [web:195][web:201]  
-Tests live under the `tests/` directory and exercise the core ingestion functions in `ingestion.text_ingestion`, `ingestion.image_ingestion`, and `ingestion.audio_ingestion`. [web:195][web:201]  
+Tests live under the `tests/` directory and exercise the core ingestion functions in `ingestion.text_ingestion`, `ingestion.image_ingestion`, and `ingestion.audio_ingestion`. 
 
 Current coverage includes:
 
-- **PDF text extraction**: a Bulbasaur Bulbapedia PDF under `data/raw/text/` is used to verify `extract_text_from_pdf`, asserting that the file exists, the extracted text is reasonably long, and it contains key markers like “Bulbasaur”, “Grass”, and “Poison” after Unicode normalization. [web:199][web:200]  
+- **PDF text extraction**: a Bulbasaur Bulbapedia PDF under `data/raw/text/` is used to verify `extract_text_from_pdf`, asserting that the file exists, the extracted text is reasonably long, and it contains key markers like “Bulbasaur”, “Grass”, and “Poison” after Unicode normalization.
 
 - **PDF ingestion schema**: `test_ingest_pdf_returns_expected_schema` checks that `ingest_pdf` returns a well‑formed record with stable fields (`id`, `modality`, `source_path`, `text`, `pokemon`, `generation`, `tags`) and that the ingested text still includes Bulbasaur content after normalization. [web:199][web:201]  
 
-- **TXT ingestion**: `test_ingest_txt_with_tmp_file` creates a temporary Charmander text file via `tmp_path` to validate `ingest_txt`, ensuring IDs, paths, Pokémon metadata, generation, tags, and text content (including “Charmander” and “Fire-type”) are populated as expected. [web:198][web:201]  
+- **TXT ingestion**: `test_ingest_txt_with_tmp_file` creates a temporary Charmander text file via `tmp_path` to validate `ingest_txt`, ensuring IDs, paths, Pokémon metadata, generation, tags, and text content (including “Charmander” and “Fire-type”) are populated as expected.   
 
-- **Text JSONL writing**: `test_write_text_record_creates_valid_jsonl` monkeypatches `ingestion.text_ingestion.TEXT_JSONL` to a temporary path, calls `write_text_record`, and asserts that a single valid JSONL line is written and that deserialized fields such as `id`, `pokemon`, and `text` content match the original record. [web:198][web:201]  
+- **Text JSONL writing**: `test_write_text_record_creates_valid_jsonl` monkeypatches `ingestion.text_ingestion.TEXT_JSONL` to a temporary path, calls `write_text_record`, and asserts that a single valid JSONL line is written and that deserialized fields such as `id`, `pokemon`, and `text` content match the original record.  
 
-- **Image OCR extraction**: `test_extract_text_from_image_simple` programmatically creates a temporary Bulbasaur image using Pillow, runs `extract_text_from_image` on it, and asserts that some text is returned and that the lowercase output contains the substring `"bulb"` to accommodate OCR quirks. [web:65][web:201]  
+- **Image OCR extraction**: `test_extract_text_from_image_simple` programmatically creates a temporary Bulbasaur image using Pillow, runs `extract_text_from_image` on it, and asserts that some text is returned and that the lowercase output contains the substring `"bulb"` to accommodate OCR quirks. 
 
-- **Image ingestion schema**: `test_ingest_image` creates a synthetic Bulbasaur card image, passes it to `ingest_image`, and verifies that the returned record has the expected schema (`id` from the filename stem, `modality == "image"`, correct `source_path`, `pokemon`, `generation`, informative `text`) and that the `tags` include `"starter"`, `"image"`, and a Bulbasaur tag. [web:65][web:201]  
+- **Image ingestion schema**: `test_ingest_image` creates a synthetic Bulbasaur card image, passes it to `ingest_image`, and verifies that the returned record has the expected schema (`id` from the filename stem, `modality == "image"`, correct `source_path`, `pokemon`, `generation`, informative `text`) and that the `tags` include `"starter"`, `"image"`, and a Bulbasaur tag.
 
-- **Image JSONL writing**: `test_write_image_record_creates_valid_jsonl` monkeypatches `ingestion.image_ingestion.IMAGES_JSONL` to a temporary file, calls `write_image_record` with a synthetic Bulbasaur record, and asserts that the file is created, exactly one JSONL line is written, and that the deserialized `id`, `pokemon`, and `text` fields match the original record. [web:198][web:201]  
+- **Image JSONL writing**: `test_write_image_record_creates_valid_jsonl` monkeypatches `ingestion.image_ingestion.IMAGES_JSONL` to a temporary file, calls `write_image_record` with a synthetic Bulbasaur record, and asserts that the file is created, exactly one JSONL line is written, and that the deserialized `id`, `pokemon`, and `text` fields match the original record.
 
-- **Audio transcription smoke test**: `test_text_from_audio_smoke` creates a temporary Bulbasaur MP3 under `tmp_path`, monkeypatches `ingestion.audio_ingestion.extract_text_from_audio` and passes a `FakeModel` that mimics Whisper’s `transcribe` output, then asserts that the returned text is non-empty and that `"bulbasaur"` appears in the lowercase transcript. [web:171][web:199]  
+- **Audio transcription smoke test**: `test_text_from_audio_smoke` creates a temporary Bulbasaur MP3 under `tmp_path`, monkeypatches `ingestion.audio_ingestion.extract_text_from_audio` and passes a `FakeModel` that mimics Whisper’s `transcribe` output, then asserts that the returned text is non-empty and that `"bulbasaur"` appears in the lowercase transcript.
 
-- **Audio ingestion schema**: `test_ingest_audio_builds_record` writes a synthetic Bulbasaur MP3, injects a `FakeModel` so no real Whisper model is loaded, calls `ingest_audio`, and verifies that the resulting record has the expected schema (`id` from the filename stem, `modality == "audio"`, correct `source_path`, `pokemon`, `generation`, and `tags` including `"starter"`, `"audio"`, and a Bulbasaur tag) and that the transcript text contains `"bulbasaur"`. [web:171][web:175]  
+- **Audio ingestion schema**: `test_ingest_audio_builds_record` writes a synthetic Bulbasaur MP3, injects a `FakeModel` so no real Whisper model is loaded, calls `ingest_audio`, and verifies that the resulting record has the expected schema (`id` from the filename stem, `modality == "audio"`, correct `source_path`, `pokemon`, `generation`, and `tags` including `"starter"`, `"audio"`, and a Bulbasaur tag) and that the transcript text contains `"bulbasaur"`. 
 
-- **Audio JSONL writing**: `test_write_audio_record_creates_valid_jsonl` monkeypatches `ingestion.audio_ingestion.AUDIO_JSONL` to a temporary file, calls `write_audio_record` with a synthetic Bulbasaur audio record, and asserts that the file is created, exactly one JSONL line is written, and that the deserialized `id`, `pokemon`, and `text` fields match the original record. [web:192][web:198]  
+- **Audio JSONL writing**: `test_write_audio_record_creates_valid_jsonl` monkeypatches `ingestion.audio_ingestion.AUDIO_JSONL` to a temporary file, calls `write_audio_record` with a synthetic Bulbasaur audio record, and asserts that the file is created, exactly one JSONL line is written, and that the deserialized `id`, `pokemon`, and `text` fields match the original record.
 
-As the RAG pipeline grows, this suite will be extended to cover embedding, retrieval, graph construction, and answer‑generation helpers so that tests evolve alongside new capabilities. [web:189][web:191]
+- **Graph merge from JSONL**: `test_build_graph_merges_fragments` uses tmp_path to create temporary `text.jsonl`, `audio.jsonl`, and `images.jsonl` files under an isolated `data/processed/` directory, each containing a single synthetic record for Bulbasaur, Charmander, and Squirtle, so graph building is exercised without touching real project data.
+
+- **Entity extraction JSON handling**: `test_extract_entities_parse_valid_json` constructs a `fake_payload` dict with one Bulbasaur node, Grass and Poison type nodes, Pokémon‑type edges, an evolution edge to Ivysaur, and a `mentions_edges` entry linking "bulbasaur_audio" to "Charmander", then serializes it to `fake_json`.
+
+As the RAG pipeline grows, this suite will be extended to cover embedding, retrieval, graph construction, and answer‑generation helpers so that tests evolve alongside new capabilities.
