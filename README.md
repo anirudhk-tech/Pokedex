@@ -11,8 +11,6 @@ Before building any ingestion or pipeline logic, this project defines how soluti
 
 All pipeline components will include functional unit tests, and evaluation reports will be automatically logged per query for continuous tracking.
 
----
-
 ## Project Overview
 
 This project aims to design and implement a modular, scalable prototype of an enterprise-grade Retrieval-Augmented Generation (RAG) system. It supports ingestion of heterogeneous data sources from three modalities — text (PDF, TXT), images (JPG, PNG), and audio (MP3) — enabling a unified, multimodal knowledge base.
@@ -25,8 +23,6 @@ Core features include:
 - Construction of a cross-modal knowledge graph for semantic and multi-hop retrieval
 - Hybrid search combining keyword matching and vector similarity search for improved retrieval relevance
 - A demo user interface with file upload, natural language queries, and visualization of results including graph exploration
-
----
 
 ## Architecture Highlights
 
