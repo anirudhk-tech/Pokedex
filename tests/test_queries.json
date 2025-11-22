@@ -1,0 +1,17 @@
+[
+  {
+    "type": "lookup",
+    "query": "What type is Bulbasaur?",
+    "answer": "Grass/Poison"
+  },
+  {
+    "type": "summarization",
+    "query": "Summarize Bulbasaur’s role in the Pokémon series.",
+    "answer": "Bulbasaur is a Grass/Poison-type starter Pokémon known for its growth and evolution into Venusaur, serving as a loyal and brave companion in both games and anime."
+  },
+  {
+    "type": "semantic_linkage",
+    "query": "Which starters share a dual-type?",
+    "answer": "Bulbasaur, Tepig, Greninja"
+  }
+]

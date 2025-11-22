@@ -59,17 +59,16 @@ This design ensures an evaluation-first, extensible system tailored to enterpris
 
 ## Evaluation-First Pipeline Design
 
-A minimal test suite covers lookup, summarization, and semantic linkage query types, specifying expected outputs for objective correctness measurement. Tests are automated with DeepEval.
+This project uses a minimal DeepEval-based test suite to evaluate the end-to-end RAG pipeline on three query types — lookup, summarization, and semantic linkage — with expected answers defined in `tests/test_queries.json`. The suite is run as part of the development workflow to provide objective signals on answer correctness and system regressions.
 
-Supported query types include:
-- Lookup: precise factual retrieval from ingested data.
-- Summarization: concise synthesis of multi-source information.
-- Semantic Linkages: relational retrieval spanning connected entities.
+Supported query types are:
+- Lookup: precise factual retrieval from ingested Pokémon starter data.
+- Summarization: concise synthesis of multi-source information about a starter’s role, traits, or history.
+- Semantic linkages: relational retrieval spanning connected entities, such as cross-generation comparisons or shared typings.
 
-Evaluation goals are defined as:
-- Retrieval Quality: measuring accuracy and relevance of the results returned.
-- Hallucination Control: minimizing unsupported or fabricated information in answers.
-- Latency: ensuring timely response with low query-to-answer delay.
+Evaluation goals are:
+- Retrieval quality: measuring how accurately and consistently the system returns relevant context and correct answers.
+- Hallucination control: reducing unsupported or fabricated information in responses, using retrieved context as the single source of truth.
+- Latency: tracking end-to-end response time to ensure interactive performance under typical query loads.
 
-Functional unit tests cover ingestion, transcription, entity extraction, embedding, search, graph construction, and generation modules.
-
+DeepEval is used to score model outputs against reference answers with automated metrics, and results are tracked across runs to monitor quality over time. Functional unit tests (via `pytest`) cover ingestion, transcription, entity extraction, embedding, search, graph construction, and answer generation modules, and are executed in CI to guard against regressions.
