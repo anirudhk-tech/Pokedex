@@ -59,8 +59,6 @@ This design ensures an evaluation-first, extensible system tailored to enterpris
 
 ## Evaluation-First Pipeline Design
 
-This project uses a minimal DeepEval-based test suite to evaluate the end-to-end RAG pipeline on three query types — lookup, summarization, and semantic linkage — with expected answers defined in `tests/test_queries.json`. The suite is run as part of the development workflow to provide objective signals on answer correctness and system regressions.
-
 Supported query types are:
 - Lookup: precise factual retrieval from ingested Pokémon starter data.
 - Summarization: concise synthesis of multi-source information about a starter’s role, traits, or history.
@@ -71,4 +69,18 @@ Evaluation goals are:
 - Hallucination control: reducing unsupported or fabricated information in responses, using retrieved context as the single source of truth.
 - Latency: tracking end-to-end response time to ensure interactive performance under typical query loads.
 
-DeepEval is used to score model outputs against reference answers with automated metrics, and results are tracked across runs to monitor quality over time. Functional unit tests (via `pytest`) cover ingestion, transcription, entity extraction, embedding, search, graph construction, and answer generation modules, and are executed in CI to guard against regressions.
+### Tests
+This project uses pytest for unit tests, with an initial focus on validating the text ingestion pipeline for Pokémon starter content.
+Tests live under the tests/ directory and exercise the core text ingestion functions in ingestion.text_ingestion.​
+
+Current coverage includes:​
+
+PDF text extraction: a Bulbasaur Bulbapedia PDF under data/raw/text/ is used to verify extract_text_from_pdf, asserting that the file exists, the extracted text is reasonably long, and it contains key markers like “Bulbasaur”, “Grass”, and “Poison” after Unicode normalization.​
+
+PDF ingestion schema: test_ingest_pdf_returns_expected_schema checks that ingest_pdf returns a well‑formed record with stable fields (id, modality, source_path, text, pokemon, generation, tags) and that the ingested text still includes Bulbasaur content after normalization.​
+
+TXT ingestion: test_ingest_txt_with_tmp_file creates a temporary Charmander text file via tmp_path to validate ingest_txt, ensuring IDs, paths, Pokémon metadata, generation, tags, and text content (including “Charmander” and “Fire-type”) are populated as expected.​
+
+JSONL writing: test_write_record_creates_valid_jsonl monkeypatches ingestion.text_ingestion.TEXT_JSONL to a temporary path, calls write_record, and asserts that a single valid JSONL line is written and that deserialized fields such as id, pokemon, and text content match the original record.​
+
+As the RAG pipeline grows, this suite will be extended to cover embedding, retrieval, graph construction, and answer‑generation helpers so that tests evolve alongside new capabilities.
