@@ -1,7 +1,9 @@
 import json
 import unicodedata
 from pathlib import Path
+from typing import Any, Dict
 
+import scripts.ingest_text_corpus as ingest_corpus
 from ingestion.text_ingestion import (
     extract_text_from_pdf,
     ingest_pdf,
@@ -99,3 +101,111 @@ def test_write_textrecord_creates_valid_jsonl(tmp_path, monkeypatch):
     assert loaded["id"] == "bulbasaur_test"
     assert loaded["pokemon"] == "Bulbasaur"
     assert "Bulbasaur" in loaded["text"]
+
+
+def test_add_text_pdf_moves_file_and_ingests(tmp_path, monkeypatch):
+    raw_dir = tmp_path / "data" / "raw" / "text"
+    monkeypatch.setattr(ingest_corpus, "RAW_TEXT_DIR", raw_dir, raising=True)
+
+    upload_dir = tmp_path / "uploads"
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    upload_file = upload_dir / "squirtle_guide.pdf"
+    upload_file.write_bytes(b"%PDF-1.4\n%fake")  # dummy PDF bytes
+
+    calls: Dict[str, Any] = {}
+
+    def fake_ingest_pdf(path: str, pokemon: str, generation: int, types: list[str]):
+        calls["ingest_args"] = ("pdf", Path(path), pokemon, generation, types)
+        return {
+            "id": "squirtle_guide",
+            "modality": "text",
+            "source_path": path,
+            "pokemon": pokemon,
+            "generation": generation,
+            "types": types,
+            "text": "Squirtle PDF text.",
+        }
+
+    def fake_ingest_txt(path: str, pokemon: str, generation: int, types: list[str]):
+        calls["ingest_args"] = ("txt", Path(path), pokemon, generation, types)
+        return {
+            "id": "squirtle_notes",
+            "modality": "text",
+            "source_path": path,
+            "pokemon": pokemon,
+            "generation": generation,
+            "types": types,
+            "text": "Squirtle TXT text.",
+        }
+
+    def fake_write_text_record(record: Dict[str, Any]) -> None:
+        calls["written_record"] = record
+
+    monkeypatch.setattr(ingest_corpus, "ingest_pdf", fake_ingest_pdf, raising=True)
+    monkeypatch.setattr(ingest_corpus, "ingest_txt", fake_ingest_txt, raising=True)
+    monkeypatch.setattr(
+        ingest_corpus, "write_text_record", fake_write_text_record, raising=True
+    )
+
+    record = ingest_corpus.add_text(upload_file)
+
+    target = raw_dir / upload_file.name
+    assert target.exists()
+    kind, ingest_path, pokemon, gen, types = calls["ingest_args"]
+    assert kind == "pdf"
+    assert ingest_path == target
+    assert pokemon == "Squirtle"
+    assert gen == 1
+    assert "water" in [t.lower() for t in types]
+    assert calls["written_record"] == record
+    assert record["pokemon"] == "Squirtle"
+
+
+def test_add_text_txt_uses_ingest_txt(tmp_path, monkeypatch):
+    raw_dir = tmp_path / "data" / "raw" / "text"
+    monkeypatch.setattr(ingest_corpus, "RAW_TEXT_DIR", raw_dir, raising=True)
+
+    upload_dir = tmp_path / "uploads"
+    upload_dir.mkdir(parents=True, exist_ok=True)
+    upload_file = upload_dir / "bulbasaur_notes.txt"
+    upload_file.write_text("Bulbasaur notes")
+
+    calls: Dict[str, Any] = {}
+
+    def fake_ingest_pdf(*args, **kwargs):
+        calls["pdf_called"] = True
+        raise AssertionError("ingest_pdf should not be called for .txt")
+
+    def fake_ingest_txt(path: str, pokemon: str, generation: int, types: list[str]):
+        calls["ingest_args"] = (Path(path), pokemon, generation, types)
+        return {
+            "id": "bulbasaur_notes",
+            "modality": "text",
+            "source_path": path,
+            "pokemon": pokemon,
+            "generation": generation,
+            "types": types,
+            "text": "Bulbasaur TXT text.",
+        }
+
+    def fake_write_text_record(record: Dict[str, Any]) -> None:
+        calls["written_record"] = record
+
+    monkeypatch.setattr(ingest_corpus, "ingest_pdf", fake_ingest_pdf, raising=True)
+    monkeypatch.setattr(ingest_corpus, "ingest_txt", fake_ingest_txt, raising=True)
+    monkeypatch.setattr(
+        ingest_corpus, "write_text_record", fake_write_text_record, raising=True
+    )
+
+    record = ingest_corpus.add_text(upload_file)
+
+    target = raw_dir / upload_file.name
+    assert target.exists()
+    ingest_path, pokemon, gen, types = calls["ingest_args"]
+    assert ingest_path == target
+    assert pokemon == "Bulbasaur"
+    assert gen == 1
+    assert "grass" in [t.lower() for t in types]
+    assert calls.get("pdf_called") is None
+    assert calls["written_record"] == record
+    assert record["pokemon"] == "Bulbasaur"

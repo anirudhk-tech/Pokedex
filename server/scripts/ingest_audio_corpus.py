@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Dict
 
 from ingestion.audio_ingestion import ingest_audio, write_audio_record
 
@@ -23,6 +24,25 @@ def resolve_metadata(path: Path) -> tuple[str, int, list[str]]:
         if key.lower() in path.stem.lower():
             return pokemon, gen, types
     raise ValueError(f"Could not resolve metadata for {path}")
+
+
+def add_audio(path: Path) -> Dict[str, str]:
+    RAW_AUDIO_DIR.mkdir(parents=True, exist_ok=True)
+    target = RAW_AUDIO_DIR / path.name
+    if path.resolve() != target.resolve():
+        target.write_bytes(path.read_bytes())
+
+    pokemon, generation, types = resolve_metadata(target)
+
+    record = ingest_audio(
+        str(target),
+        pokemon=pokemon,
+        generation=generation,
+        types=types,
+    )
+    write_audio_record(record)
+    logger.info("Added audio %s for %s (gen %d)", target, pokemon, generation)
+    return record
 
 
 def main() -> None:

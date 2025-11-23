@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+from typing import Dict
 
 from ingestion.image_ingestion import ingest_image, write_image_record
 
@@ -22,6 +23,30 @@ def resolve_metadata(path: Path) -> tuple[str, int, list[str]]:
         if key.lower() in path.stem.lower():
             return pokemon, gen, types
     raise ValueError(f"Could not resolve metadata for {path}")
+
+
+def add_image(raw_file: Path) -> Dict[str, str]:
+    """
+    Given a path to an image file, move/copy it into data/raw/images,
+    infer metadata, ingest it, and append to data/processed/images.jsonl.
+    """
+    RAW_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+
+    target = RAW_IMAGE_DIR / raw_file.name
+    if raw_file.resolve() != target.resolve():
+        target.write_bytes(raw_file.read_bytes())
+
+    pokemon, generation, types = resolve_metadata(target)
+
+    record = ingest_image(
+        str(target),
+        pokemon=pokemon,
+        generation=generation,
+        types=types,
+    )
+    write_image_record(record)
+    logging.info("Added image %s for %s (gen %d)", target, pokemon, generation)
+    return record
 
 
 def main() -> None:

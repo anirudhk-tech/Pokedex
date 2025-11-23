@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 from typing import Dict
 
-import whisper
+import whisper  # type: ignore (local IDE quirk fix, safe to ignore)
 
 logger = logging.getLogger(__name__)
 

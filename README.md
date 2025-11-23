@@ -105,4 +105,10 @@ Current coverage includes:
 
 - **Graph build API smoke**: `test_process_endpoint_smoke` similarly monkeypatches `api.main.run_build_graph` with a `fake_process` function that marks `calls["process"] = True`, sends a POST request to `/process`, and asserts that the response is 200, the JSON `message` contains `"Graph built"`, and the fake function was called, verifying that the graph‑building endpoint is correctly wired to its script entrypoint while keeping tests fast and side‑effect free.
 
+- **Single audio file add**: `test_add_audio_moves_file_and_ingests` points `RAW_AUDIO_DIR` at a temp directory, fakes `ingest_audio` / `write_audio_record`, writes a dummy Bulbasaur MP3, calls `add_audio(...)`, and asserts the file is copied under data/raw/audio/ and that ingestion is invoked with the expected Bulbasaur metadata.
+
+- **Single image file add**: `test_add_image_moves_file_and_ingests` redirects `RAW_IMAGE_DIR` to a temp directory, monkeypatches `ingest_image` / `write_image_record`, creates a fake Charmander PNG, runs `add_image(...)`, and checks that the image is copied under data/raw/images/ and that ingestion is called with the correct Charmander metadata.
+
+- **Single text file add (PDF/TXT)**: `test_add_text_pdf_moves_file_and_ingests` and `test_add_text_txt_uses_ingest_txt` redirect `RAW_TEXT_DIR`, fake `ingest_pdf` / `ingest_txt` and `write_text_record`, feed in synthetic Squirtle PDF and Bulbasaur TXT files, and assert that each is copied under data/raw/text/ and routed to the correct ingestion function with the right Pokémon metadata.
+
 As the RAG pipeline grows, this suite will be extended to cover embedding, retrieval, graph construction, and answer‑generation helpers so that tests evolve alongside new capabilities.
