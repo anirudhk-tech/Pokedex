@@ -1,8 +1,6 @@
 import json
 from typing import Any, Dict
 
-import pytest
-
 from processing.entity_extraction import extract_entities
 
 
@@ -34,9 +32,17 @@ def test_extract_entities_parse_valid_json(monkeypatch):
 
     fake_json = json.dumps(fake_payload, ensure_ascii=False)
 
+    class FakeContent:
+        def __init__(self, text: str):
+            self.text = text
+
+    class FakeOutputItem:
+        def __init__(self, text: str):
+            self.content = [FakeContent(text)]
+
     class FakeResponse:
         def __init__(self, text: str):
-            self.output_text = text
+            self.output = [FakeOutputItem(text)]
 
     class FakeResponses:
         def create(self, *args, **kwargs):

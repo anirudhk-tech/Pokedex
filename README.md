@@ -99,4 +99,10 @@ Current coverage includes:
 
 - **Entity extraction JSON handling**: `test_extract_entities_parse_valid_json` constructs a `fake_payload` dict with one Bulbasaur node, Grass and Poison type nodes, Pokémon‑type edges, an evolution edge to Ivysaur, and a `mentions_edges` entry linking "bulbasaur_audio" to "Charmander", then serializes it to `fake_json`.
 
+- **API health check**: `test_health` uses FastAPI’s `TestClient` to call the `/health` endpoint and asserts that it returns a 200 status code with the exact JSON body `{"status": "ok"}`, serving as a quick smoke test that the server is up and correctly wired.
+
+- **Ingestion API smoke**: `test_ingest_endpoint_smoke` monkeypatches `api.main.run_full_ingest` with a fake_ingest function that simply flips a flag in a local calls dict, then posts to `/ingest` and asserts that the response status is 200, the JSON `message` starts with `"Ingestion process"`, and that the fake ingest function was actually invoked, confirming the endpoint correctly triggers the ingestion pipeline without running the full job in tests.
+
+- **Graph build API smoke**: `test_process_endpoint_smoke` similarly monkeypatches `api.main.run_build_graph` with a `fake_process` function that marks `calls["process"] = True`, sends a POST request to `/process`, and asserts that the response is 200, the JSON `message` contains `"Graph built"`, and the fake function was called, verifying that the graph‑building endpoint is correctly wired to its script entrypoint while keeping tests fast and side‑effect free.
+
 As the RAG pipeline grows, this suite will be extended to cover embedding, retrieval, graph construction, and answer‑generation helpers so that tests evolve alongside new capabilities.
