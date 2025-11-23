@@ -1,3 +1,4 @@
+import csv
 import json
 from pathlib import Path
 from typing import Any, Dict, Iterator
@@ -7,6 +8,44 @@ from processing.entity_extraction import extract_entities
 TEXT_JSONL = Path("data/processed/text.jsonl")
 IMAGES_JSONL = Path("data/processed/images.jsonl")
 AUDIO_JSONL = Path("data/processed/audio.jsonl")
+
+GRAPH_DIR = Path("graph")
+NODES_DIR = GRAPH_DIR / "nodes"
+EDGES_DIR = GRAPH_DIR / "edges"
+GRAPH_JSON = GRAPH_DIR / "graph.json"
+
+
+def build_graph_and_export_to_csv_and_json() -> Dict[str, Any]:
+    graph = build_graph()
+
+    GRAPH_DIR.mkdir(parents=True, exist_ok=True)
+    NODES_DIR.mkdir(parents=True, exist_ok=True)
+    EDGES_DIR.mkdir(parents=True, exist_ok=True)
+
+    with (NODES_DIR / "pokemon_nodes.csv").open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["name", "generation", "primary_type", "secondary_type"],
+        )
+        writer.writeheader()
+        writer.writerows(graph["pokemon_nodes"])
+
+    with (NODES_DIR / "type_nodes.csv").open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["name"])
+        writer.writeheader()
+        writer.writerows(graph["type_nodes"])
+
+    with (EDGES_DIR / "mentions_edges.csv").open(
+        "w", newline="", encoding="utf-8"
+    ) as f:
+        writer = csv.DictWriter(f, fieldnames=["from_media_id", "to_pokemon"])
+        writer.writeheader()
+        writer.writerows(graph["mentions_edges"])
+
+    with GRAPH_JSON.open("w", encoding="utf-8") as f:
+        json.dump(graph, f, indent=2, ensure_ascii=False)
+
+    return graph
 
 
 def _iter_jsonl(path: Path) -> Iterator[Dict[str, Any]]:
