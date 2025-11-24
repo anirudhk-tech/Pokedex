@@ -1,5 +1,16 @@
 # Hybrid Multi-Modal Enterprise RAG System
 
+## Quick Links
+
+- [Project Goals](#project-goals)
+- [Project Overview](#project-overview)
+- [Architecture Highlights](#architecture-highlights)
+- [Evaluation-First Pipeline Design](#evaluation-first-pipeline-design)
+- [Data Ingestion and Preprocessing](#data-ingestion-and-preprocessing)
+- [Entity & Relationship Extraction and Hybrid Indexing](#entity--relationship-extraction-and-hybrid-indexing)
+- [User Interface / Demo](#user-interface--demo)
+- [How to Run](#how-to-run)
+
 ## Project Goals
 
 Before building any ingestion or pipeline logic, this project defines how solution quality will be measured and what outcomes are expected:
