@@ -212,3 +212,24 @@ Across all modalities, the ingestion layer produces a consistent JSON record sha
   "generation": 1,
   "tags": ["starter", "bulbasaur", "gen1"]
 }
+
+## Entity & Relationship Extraction and Hybrid Indexing
+
+This project turns the raw multimodal corpus into a structured Pokémon knowledge graph and a parallel vector index that power hybrid retrieval.
+
+**Entity and relationship extraction**  
+For each ingested record (text, image OCR, audio transcript), an LLM is prompted to extract structured entities and relations from the raw text. The extraction step produces normalized Pokémon-centric records, including fields such as `pokemon`, `types`, `generation`, `evolutions`, and cross-references between entities (e.g., “Bulbasaur → Ivysaur → Venusaur”). These structured outputs are appended to intermediate JSONL files, which serve as the canonical source for graph construction and downstream analysis.
+
+**Cross-modal entity linking**  
+Because all modalities share the same metadata schema, mentions of the same Pokémon across PDFs, images, and audio are aligned via their shared `pokemon` field and tags. For example, a Bulbasaur entry extracted from a PDF, an OCR’d Bulbasaur trading card, and a Bulbasaur audio clip transcript are all linked to the same logical node in the graph and can be retrieved together. This cross-modal alignment allows the system to answer questions by combining evidence from multiple sources that talk about the same entity.
+
+**Graph schema generation**  
+From the extracted entities and relations, the pipeline infers and materializes a graph schema that includes:
+- Pokémon nodes (name, generation, primary/secondary types)  
+- Type nodes (e.g., Grass, Fire, Water)  
+- Edges for Pokémon–type membership, evolution chains, and text/image/audio “mentions”
+
+The graph builder exports this schema to CSV and `graph.json`, which are then served through the `/graph` API and visualized in the UI as an interactive knowledge graph.
+
+**Parallel vector index construction**  
+In parallel with graph construction, the ingestion pipeline builds a vector index over all textual signals in the corpus (PDF text, OCR output, audio transcripts). Each record’s text is embedded into a dense vector and stored together with its metadata (`pokemon`, `modality`, `tags`) in the vector store. This yields a hybrid retrieval layer: graph lookups provide explicit entity–relation structure, while vector search provides semantic similarity over the raw multimodal content, and both are combined at query time to ground the LLM’s answers.
