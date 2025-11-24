@@ -294,13 +294,10 @@ pytest
 ```
 
 3. Initialize the Qdrant collection
-Create the pokemon_corpus collection once in Qdrant Cloud (via the Qdrant UI or HTTP):
-
-Collection name: pokemon_corpus
-
-Vector size: 1536
-
-Distance: Cosine
+- Create the pokemon_corpus collection once in Qdrant Cloud (via the Qdrant UI or HTTP):
+- Collection name: pokemon_corpus
+- Vector size: 1536
+- Distance: Cosine
 
 After this, the backend will upsert points into this collection automatically during ingestion.
 
@@ -314,20 +311,14 @@ python -m scripts.process   # build the Pokémon knowledge graph (graph.json + C
 ```
 
 - `scripts.ingest`
-
-Ingests PDFs, text files, images, and audio into normalized JSONL records.
-
-Extracts entities and relationships and writes intermediate structured data.
-
-Computes embeddings and upserts vectors + payloads into Qdrant.
+  - Ingests PDFs, text files, images, and audio into normalized JSONL records.
+  - Extracts entities and relationships and writes intermediate structured data.
+  - Computes embeddings and upserts vectors + payloads into Qdrant.
 
 - `scripts.process`
-
-Reads the structured JSONL corpus.
-
-Builds the Pokémon knowledge graph (nodes + edges).
-
-Exports graph.json and CSVs consumed by the /graph API and UI.
+  - Reads the structured JSONL corpus.
+  - Builds the Pokémon knowledge graph (nodes + edges).
+  - Exports graph.json and CSVs consumed by the /graph API and UI.
 
 You should re‑run scripts.ingest (and then scripts.process) whenever you add new raw data under `data/raw/....`
 
@@ -365,27 +356,24 @@ By default the frontend expects the API at http://localhost:8000 (configurable v
 
 
 7. Using the demo
-Upload new files
+- Upload new files
+- Use the Upload button in the top bar to add .pdf, .txt, .png/.jpg, or .mp3 files.
+- The backend routes them through the same ingestion + embedding pipeline.
+- The backend also updates the knowledge graph after each upload.
 
-Use the Upload button in the top bar to add .pdf, .txt, .png/.jpg, or .mp3 files.
-
-The backend routes them through the same ingestion + embedding pipeline.
-
-After uploading new data, re‑run python -m scripts.process or hit POST /process so the knowledge graph reflects the updated corpus.
-
-## Ask questions
+### Ask questions
 
 Use the chat panel on the left to ask natural language questions about the starter Pokémon domain.
 
 Each query calls `/chat`, which combines knowledge‑graph context with vector search results from Qdrant to generate an answer.
 
-## Explore the graph
+### Explore the graph
 
 The right panel shows the Pokémon knowledge graph built from the extracted entities and relationships.
 
 The graph is currently rendered as an explorable visualization; the API also returns a “focused Pokémon” node per query, which is available for future UI enhancements, but the current UI does not auto‑highlight that node yet.
 
-## Inspect evaluation logs
+### Inspect evaluation logs
 
 Use the Logs button in the top bar to open the evaluation log viewer.
 
