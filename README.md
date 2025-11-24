@@ -42,6 +42,7 @@ The system is architected as composed, independently testable modules:
   - Use of LLMs for named entity recognition and relationship identification across modalities  
   - Cross-modal entity linking to unify references (e.g., same person in text and audio)  
   - Schema inference for knowledge graph construction  
+  - Vector embeddings and similarity search for a hybrid context
 
 - **Knowledge Graph & Hybrid Search:**  
   - Graph database (e.g., Neo4j) storing entities and relations  
