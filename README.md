@@ -1,5 +1,8 @@
 # Hybrid Multi-Modal Enterprise RAG System
 
+## Demo
+- [![Watch the demo](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
+
 ## Quick Links
 
 - [Project Goals](#project-goals)
