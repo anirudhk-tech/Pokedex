@@ -35,8 +35,10 @@ const API_BASE = "http://localhost:8000"; // adjust if you proxy
 
 export const GraphView = ({
   updateGraphVisual,
+  focusedPokemon,
 }: {
   updateGraphVisual: boolean;
+  focusedPokemon: string | null;
 }) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);

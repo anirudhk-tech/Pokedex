@@ -1,6 +1,7 @@
 import logging
 
 from config import openai_client
+from eval_logging.eval_logger import log_evaluation
 from fastapi import APIRouter, Form  # type: ignore (safe to ignore, local editor quirk)
 from processing.graph_store import build_graph_context
 
@@ -28,6 +29,21 @@ async def chat(message: str = Form(...)):
         ],
         temperature=0.7,
         max_output_tokens=100,
+    )
+
+    evaluation_scores = {
+        "grounded_in_graph": bool(context),
+        "latency_ms": None,
+    }
+
+    answer = response.output[0].content[0].text
+
+    log_evaluation(
+        query=message,
+        answer=answer,
+        retrieved_context=context,
+        evaluation_scores=evaluation_scores,
+        focused_pokemon=node,
     )
 
     return {"content": response.output[0].content[0].text, "node": node}
