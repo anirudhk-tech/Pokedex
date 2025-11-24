@@ -9,6 +9,7 @@ from ingestion.image_ingestion import (
     write_image_record,
 )
 from PIL import Image, ImageDraw
+from processing import vector_store
 
 
 def _create_test_image(path: Path, text: str = "Bulbasaur") -> None:
@@ -28,9 +29,16 @@ def test_extract_text_from_image_simple(tmp_path: Path):
     assert "bulb" in extracted_text.lower()  # partial to accomodate OCR quirks
 
 
-def test_ingest_image(tmp_path: Path):
+def test_ingest_image(tmp_path: Path, monkeypatch):
     img_path = tmp_path / "bulbasaur_card.png"
     _create_test_image(img_path, text="Bulbasaur")
+
+    monkeypatch.setattr(
+        "ingestion.image_ingestion.upsert_document", lambda *a, **k: None, raising=True
+    )
+    monkeypatch.setattr(
+        "ingestion.image_ingestion.embed_text", lambda text: [0.0] * 1536, raising=True
+    )
 
     record = ingest_image(
         str(img_path), pokemon="Bulbasaur", generation=1, types=["Grass", "Poison"]

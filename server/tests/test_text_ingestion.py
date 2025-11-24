@@ -10,6 +10,7 @@ from ingestion.text_ingestion import (
     ingest_txt,
     write_text_record,
 )
+from processing import vector_store
 
 PDF_PATH = Path(
     "data/raw/text/"
@@ -34,8 +35,15 @@ def test_extract_text_from_pdf_bulbasaur():
     assert "Poison" in text
 
 
-def test_ingest_pdf_returns_expected_schema():
+def test_ingest_pdf_returns_expected_schema(monkeypatch):
     assert PDF_PATH.exists(), "Bulbasaur PDF missing under data/raw/text"
+
+    monkeypatch.setattr(
+        "ingestion.text_ingestion.upsert_document", lambda *a, **k: None, raising=True
+    )
+    monkeypatch.setattr(
+        "ingestion.text_ingestion.embed_text", lambda text: [0.0] * 1536, raising=True
+    )
 
     record = ingest_pdf(
         str(PDF_PATH), pokemon="Bulbasaur", generation=1, types=["Grass", "Poison"]
@@ -53,11 +61,18 @@ def test_ingest_pdf_returns_expected_schema():
     assert "Bulbasaur" in _normalize(record["text"])
 
 
-def test_ingest_txt_with_tmp_file(tmp_path):
+def test_ingest_txt_with_tmp_file(tmp_path, monkeypatch):
     txt_path = tmp_path / "charmander.txt"
     txt_path.write_text(
         "Charmander is a Fire-type starter Pokémon from Generation I.",
         encoding="utf-8",
+    )
+
+    monkeypatch.setattr(
+        "ingestion.text_ingestion.upsert_document", lambda *a, **k: None, raising=True
+    )
+    monkeypatch.setattr(
+        "ingestion.text_ingestion.embed_text", lambda text: [0.0] * 1536, raising=True
     )
 
     record = ingest_txt(

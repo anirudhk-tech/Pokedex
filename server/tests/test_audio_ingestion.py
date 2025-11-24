@@ -8,6 +8,7 @@ from ingestion.audio_ingestion import (
     ingest_audio,
     write_audio_record,
 )
+from processing import vector_store
 
 
 class FakeModel:
@@ -43,6 +44,13 @@ def test_ingest_audio_builds_record(tmp_path: Path, monkeypatch):
     monkeypatch.setattr(
         "ingestion.audio_ingestion.write_audio_record",
         lambda p: "Bulbasaur is a Grass/Poison-type starter Pokémon.",
+    )
+
+    monkeypatch.setattr(
+        "ingestion.audio_ingestion.upsert_document", lambda *a, **k: None, raising=True
+    )
+    monkeypatch.setattr(
+        "ingestion.audio_ingestion.embed_text", lambda text: [0.0] * 1536, raising=True
     )
 
     record = ingest_audio(

@@ -2,6 +2,8 @@ import json
 import logging
 from pathlib import Path
 
+from processing.embeddings import embed_text
+from processing.vector_store import upsert_document
 from pypdf import PdfReader
 
 logger = logging.getLogger(__name__)
@@ -78,6 +80,15 @@ def ingest_pdf(
         ],  # dataset is all starter pokemon, default tag "starter"
     }
 
+    vector = embed_text(record["text"])
+    metadata = {
+        "media_id": record["id"],
+        "media_type": "text",
+        "pokemon": record.get("pokemon"),
+        "source_path": str(pdf_path),
+    }
+    upsert_document(doc_id=record["id"], vector=vector, metadata=metadata)
+
     logger.debug(
         "ingest_pdf record created",
         extra={
@@ -116,6 +127,15 @@ def ingest_txt(
         "types": types,
         "tags": ["starter", pokemon.lower()],
     }
+
+    vector = embed_text(record["text"])
+    metadata = {
+        "media_id": record["id"],
+        "media_type": "text",
+        "pokemon": record.get("pokemon"),
+        "source_path": str(txt_path),
+    }
+    upsert_document(doc_id=record["id"], vector=vector, metadata=metadata)
 
     logger.debug(
         "ingest_txt record created",

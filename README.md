@@ -166,3 +166,70 @@ A Bulbasaur Bulbapedia PDF under `data/raw/text/` is used to verify `extract_tex
 `test_bulbasaur_types` uses FastAPI’s `TestClient` to query the `/chat` endpoint with the prompt **“What types is Bulbasaur?”**. It then wraps the model’s reply in an `LLMTestCase` and evaluates it using DeepEval’s `AnswerRelevancyMetric` (configured with a relevance threshold and model). The test asserts that the answer is sufficiently relevant to a short gold snippet describing **Bulbasaur as a dual-type Grass/Poison Pokémon**, confirming the chat endpoint’s semantic correctness rather than just string matching.
 
 As the RAG pipeline grows, this suite will be extended to cover embedding, retrieval, graph construction, and answer‑generation helpers so that tests evolve alongside new capabilities.
+
+## Data Ingestion and Preprocessing
+
+2. Data Ingestion and Preprocessing
+This project ingests a multimodal Pokémon corpus across text, images, and audio, normalizes it into a unified schema, and enriches every record with graph-friendly metadata.
+
+Supported modalities and formats
+
+Text: .pdf, .txt
+
+Images: .jpg, .jpeg, .png
+
+Audio: .mp3
+
+(Video .mp4 is left as a future extension but is already anticipated in the design.)
+
+Modal-specific preprocessing pipeline
+
+Text (PDF / TXT)
+
+PDFs are parsed into raw text using a document text extractor.
+
+TXT files are read directly as UTF-8 text.
+
+Each text record is normalized (Unicode cleanup), tagged with Pokémon metadata (pokemon, generation, types), and labeled as modality="text".
+
+A document-level embedding is computed and stored in the vector database for semantic search.
+
+Images (PNG / JPG)
+
+Uploaded images are saved under data/raw/images.
+
+OCR is run over each image to extract any Pokémon-related text (e.g., card text, labels).
+
+The resulting record includes text (OCR output), pokemon, generation, types, modality="image", plus tags like "image", "starter", and the lowercase Pokémon name.
+
+The OCR text is embedded and upserted into the vector database so images can participate in text-based search.
+
+Audio (MP3)
+
+Audio files are stored under data/raw/audio.
+
+A speech-to-text step produces transcripts for each clip.
+
+The transcript is stored in text, with metadata fields mirroring other modalities (pokemon, generation, types, modality="audio", tags such as "audio", "starter", and the Pokémon name).
+
+Transcript text is embedded and added to the vector database, enabling semantic search over spoken content.
+
+Unified schema and metadata enrichment
+
+Across all modalities, the ingestion layer produces a consistent JSON record shape, for example:
+
+```json
+{
+  "id": "bulbasaur_bulbapedia_pdf",
+  "modality": "text",
+  "source_path": "data/raw/text/Bulbasaur-…pdf",
+  "text": "Bulbasaur is a dual-type Grass/Poison starter Pokémon from Generation 1...",
+  "pokemon": "Bulbasaur",
+  "types": ["Grass", "Poison"],
+  "generation": 1,
+  "tags": ["starter", "bulbasaur", "gen1"]
+}
+```
+All records share common fields (id, modality, source_path, text, pokemon, types, generation, tags), making them easy to feed into both the knowledge graph builder and the vector database.
+
+Domain-specific tags ("starter", Pokémon name, generation, element types) are added at ingest time so downstream components (graph construction, filters, hybrid search) can reason about the domain without re-deriving these attributes.

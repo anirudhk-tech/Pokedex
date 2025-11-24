@@ -4,6 +4,8 @@ from pathlib import Path
 
 import pytesseract
 from PIL import Image
+from processing.embeddings import embed_text
+from processing.vector_store import upsert_document
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +80,15 @@ def ingest_image(
             pokemon.lower(),
         ],
     }  # dataset is all starter pokemon, default tag "starter"
+
+    vector = embed_text(record["text"])
+    metadata = {
+        "media_id": record["id"],
+        "media_type": "text",
+        "pokemon": record.get("pokemon"),
+        "source_path": str(image_path),
+    }
+    upsert_document(doc_id=record["id"], vector=vector, metadata=metadata)
 
     logger.debug(
         "ingest_image record created",

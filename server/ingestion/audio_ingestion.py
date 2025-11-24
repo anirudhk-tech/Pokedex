@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Dict
 
 import whisper
+from processing.embeddings import embed_text
+from processing.vector_store import upsert_document
 
 logger = logging.getLogger(__name__)
 
@@ -89,6 +91,15 @@ def ingest_audio(
         "types": types,
         "tags": ["starter", "audio", pokemon.lower()],
     }  # dataset is all starter pokemon, default tag "starter"
+
+    vector = embed_text(record["text"])
+    metadata = {
+        "media_id": record["id"],
+        "media_type": "text",
+        "pokemon": record.get("pokemon"),
+        "source_path": str(audio_path),
+    }
+    upsert_document(doc_id=record["id"], vector=vector, metadata=metadata)
 
     logger.debug(
         "ingest_audio finished",
