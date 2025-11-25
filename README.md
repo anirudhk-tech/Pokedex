@@ -85,7 +85,7 @@ Evaluation goals are:
 - Latency: tracking end-to-end response time to ensure interactive performance under typical query loads.
 
 ### Tests
-This project uses `pytest` for unit tests, with an initial focus on validating the text, image, and audio ingestion pipelines for Pokémon starter content. [web:195][web:201]  
+This project uses `pytest` for unit tests, with an initial focus on validating the text, image, and audio ingestion pipelines for Pokémon starter content.
 Tests live under the `tests/` directory and exercise the core backend functions. 
 
 Current coverage includes:
