@@ -281,6 +281,7 @@ curl -X POST http://localhost:8000/add/audio \
 The ingestion pipeline processes raw files into structured, searchable records.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 flowchart TB
     subgraph Input["📁 Input Files"]
         PDF["📄 PDF"]
@@ -348,6 +349,7 @@ Every ingested record follows this schema:
 The processing pipeline builds a knowledge graph from ingested data.
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 flowchart TB
     subgraph Load["1️⃣ Load Records"]
         TEXT_JSON["text.jsonl"]

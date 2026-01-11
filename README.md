@@ -95,6 +95,7 @@ Think of it as your personal **Pokédex powered by AI** — but the underlying t
 ## 🏗️ Architecture
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333', 'primaryColor': '#e8f5e9', 'secondaryColor': '#fff3e0'}}}%%
 flowchart TB
     subgraph Sources["📁 Data Sources"]
         PDF["📄 PDF"]

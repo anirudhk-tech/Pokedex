@@ -29,6 +29,7 @@ This architecture enables both precise graph traversal (e.g., "What type is Bulb
 ## System Architecture
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 flowchart TB
     subgraph Presentation["🖥️ PRESENTATION LAYER"]
         direction TB
@@ -118,6 +119,7 @@ flowchart TB
 ### Ingestion Flow
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 flowchart LR
     subgraph Input["📁 Raw Files"]
         PDF["📄 PDF"]
@@ -188,6 +190,7 @@ flowchart LR
 ### Query Flow
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'actorTextColor': '#000000', 'signalTextColor': '#000000', 'labelTextColor': '#000000', 'loopTextColor': '#000000', 'noteTextColor': '#000000'}}}%%
 sequenceDiagram
     participant User
     participant API as FastAPI
@@ -227,6 +230,7 @@ sequenceDiagram
 ### Knowledge Graph Structure
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 graph LR
     subgraph Pokemon["🔴 Pokémon Nodes"]
         BULB["🌿 Bulbasaur<br/>Gen 1"]
@@ -461,6 +465,7 @@ data/processed/graph.json
 ### Vector Database (Qdrant)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000'}}}%%
 erDiagram
     COLLECTION {
         string name "pokemon_corpus"
@@ -514,6 +519,7 @@ logs/eval.jsonl
 ### Why Hybrid RAG?
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'quadrant1TextFill': '#000000', 'quadrant2TextFill': '#000000', 'quadrant3TextFill': '#000000', 'quadrant4TextFill': '#000000'}}}%%
 quadrantChart
     title RAG Approach Comparison
     x-axis Low Precision --> High Precision
@@ -585,6 +591,7 @@ Alternative: Could use open-source models (Llama, Mistral) with similar architec
 ### Adding a New Modality
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 flowchart LR
     A["1. Create ingestion<br/>module"] --> B["2. Update<br/>scripts"]
     B --> C["3. Add API<br/>route"]
@@ -697,6 +704,7 @@ async def chat(
 ### Scaling Strategies
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryTextColor': '#000000', 'secondaryTextColor': '#000000', 'tertiaryTextColor': '#000000', 'lineColor': '#333333'}}}%%
 flowchart LR
     subgraph Current["Current (Prototype)"]
         A1["Single API"]
