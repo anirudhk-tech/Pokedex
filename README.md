@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" width="120" alt="Pikachu">
 </p>
 
-<h1 align="center">⚡ PokéRAG</h1>
+<h1 align="center">⚡ Pokédex</h1>
 <h3 align="center">Enterprise-Grade Multimodal RAG System</h3>
 <h4 align="center"><em>Gotta Retrieve 'Em All!</em></h4>
 
@@ -35,13 +35,13 @@
 
 **[▶️ Watch the full demo on Loom](https://www.loom.com/share/a0107a9ab16443319343a034956b001f)**
 
-See PokéRAG in action: multimodal file upload, natural language queries, knowledge graph visualization, and evaluation logging!
+See Pokédex in action: multimodal file upload, natural language queries, knowledge graph visualization, and evaluation logging!
 
 ---
 
-## 🎯 What is PokéRAG?
+## 🎯 What is Pokédex?
 
-**PokéRAG** is a production-ready, multimodal Retrieval-Augmented Generation (RAG) system built with modern best practices. While it uses Pokémon data as a fun demonstration domain, the architecture is designed for real enterprise use cases.
+**Pokédex** is a production-ready, multimodal Retrieval-Augmented Generation (RAG) system built with modern best practices. While it uses Pokémon data as a fun demonstration domain, the architecture is designed for real enterprise use cases.
 
 Think of it as your personal **Pokédex powered by AI** — but the underlying tech can handle any domain: legal documents, medical records, technical manuals, or multimedia content.
 
@@ -377,7 +377,7 @@ pytest tests/test_deepeval.py -v
 
 ## 📊 Evaluation Framework
 
-PokéRAG is built with an **evaluation-first** approach:
+Pokédex is built with an **evaluation-first** approach:
 
 ```python
 # Every chat query logs:

@@ -15,7 +15,7 @@ We actively support security updates for the following versions:
 
 ## Reporting a Vulnerability 🔐
 
-We take security seriously at PokéRAG! If you discover a security vulnerability, please report it responsibly.
+We take security seriously at Pokédex! If you discover a security vulnerability, please report it responsibly.
 
 ### How to Report
 

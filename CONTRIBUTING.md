@@ -1,6 +1,6 @@
-# 🤝 Contributing to PokéRAG
+# 🤝 Contributing to Pokédex
 
-First off, thank you for considering contributing to PokéRAG! It's trainers like you that make this Pokédex truly legendary. ⚡
+First off, thank you for considering contributing to Pokédex! It's trainers like you that make this Pokédex truly legendary. ⚡
 
 > "I see now that the circumstances of one's birth are irrelevant; it is what you do with the gift of life that determines who you are." — Mewtwo
 
@@ -61,7 +61,7 @@ Returns Electric type but mentions Raichu evolution
 
 ### ✨ Suggesting Features
 
-Have an idea to make PokéRAG better? We'd love to hear it!
+Have an idea to make Pokédex better? We'd love to hear it!
 
 **Feature requests should include:**
 
@@ -192,7 +192,7 @@ Describe how you tested your changes
 1. A maintainer will review your PR
 2. They may request changes or ask questions
 3. Once approved, your PR will be merged
-4. Celebrate! 🎉 You're now a PokéRAG contributor!
+4. Celebrate! 🎉 You're now a Pokédex contributor!
 
 ---
 

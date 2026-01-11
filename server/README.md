@@ -1,4 +1,4 @@
-# 🔥 PokéRAG Server
+# 🔥 Pokédex Server
 
 > The brain behind the Pokédex — a FastAPI-powered multimodal RAG backend
 
@@ -26,7 +26,7 @@
 
 ## Overview
 
-The PokéRAG server is a FastAPI application that provides:
+The Pokédex server is a FastAPI application that provides:
 
 - **Multimodal Ingestion**: Process PDFs, images, and audio files
 - **Entity Extraction**: LLM-powered named entity recognition
@@ -570,5 +570,5 @@ sudo apt-get install tesseract-ocr
 </p>
 
 <p align="center">
-  <strong>Built with 🔥 by PokéRAG Team</strong>
+  <strong>Built with 🔥 by Pokédex Team</strong>
 </p>

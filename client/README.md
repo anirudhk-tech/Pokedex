@@ -1,6 +1,6 @@
-# 🌊 PokéRAG Client
+# 🌊 Pokédex Client
 
-> A modern Next.js frontend for the PokéRAG multimodal RAG system
+> A modern Next.js frontend for the Pokédex multimodal RAG system
 
 <p>
   <img src="https://img.shields.io/badge/Next.js-16-black.svg?logo=next.js&logoColor=white" alt="Next.js">
@@ -25,7 +25,7 @@
 
 ## Overview
 
-The PokéRAG client is a Next.js 16 application that provides:
+The Pokédex client is a Next.js 16 application that provides:
 
 - **Chat Interface**: Natural language querying with real-time responses
 - **Knowledge Graph Visualization**: Interactive graph powered by React Flow
@@ -360,5 +360,5 @@ origins = [
 </p>
 
 <p align="center">
-  <strong>Built with 🌊 by PokéRAG Team</strong>
+  <strong>Built with 🌊 by Pokédex Team</strong>
 </p>

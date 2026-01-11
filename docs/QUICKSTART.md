@@ -1,6 +1,6 @@
 # ⚡ Quick Start Guide
 
-> Get PokéRAG running in 5 minutes!
+> Get Pokédex running in 5 minutes!
 
 ---
 
@@ -146,7 +146,7 @@ pnpm dev
 
 ---
 
-## Step 8: Start Using PokéRAG! 🎉
+## Step 8: Start Using Pokédex! 🎉
 
 Open your browser to **http://localhost:3000**
 

@@ -1,4 +1,4 @@
-# 🏛️ PokéRAG Architecture
+# 🏛️ Pokédex Architecture
 
 > A deep dive into the system design and implementation details
 
@@ -16,7 +16,7 @@
 
 ## Overview
 
-PokéRAG is a **hybrid multimodal RAG system** that combines:
+Pokédex is a **hybrid multimodal RAG system** that combines:
 
 1. **Knowledge Graph**: Structured entity-relationship storage
 2. **Vector Database**: Semantic similarity search
@@ -518,7 +518,7 @@ quadrantChart
     title RAG Approach Comparison
     x-axis Low Precision --> High Precision
     y-axis Low Recall --> High Recall
-    quadrant-1 Best for PokéRAG
+    quadrant-1 Best for Pokédex
     quadrant-2 Good for semantic
     quadrant-3 Limited use
     quadrant-4 Good for facts

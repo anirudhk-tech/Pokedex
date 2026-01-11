@@ -1,6 +1,6 @@
-# 📖 PokéRAG Documentation
+# 📖 Pokédex Documentation
 
-> Your comprehensive guide to the PokéRAG multimodal RAG system
+> Your comprehensive guide to the Pokédex multimodal RAG system
 
 ---
 

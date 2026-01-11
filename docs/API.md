@@ -1,6 +1,6 @@
-# 📚 PokéRAG API Reference
+# 📚 Pokédex API Reference
 
-> Complete API documentation for the PokéRAG backend
+> Complete API documentation for the Pokédex backend
 
 ## Base URL
 
